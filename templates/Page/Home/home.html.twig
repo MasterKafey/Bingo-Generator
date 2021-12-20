@@ -1,0 +1,64 @@
+{% extends 'Layout/Authenticated/base.html.twig' %}
+
+{% block sub_title %}Accueil{% endblock sub_title %}
+
+{% block body_content %}
+    <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {% for bingo_card in bingo_cards %}
+            {% set checkNumber = 0 %}
+            {% for cell in bingo_card.cells %}
+                {% if cell.state == constant('App\\Entity\\BingoCardCell::CHECK_STATE') %}
+                    {% set checkNumber = checkNumber + 1 %}
+                {% endif %}
+            {% endfor %}
+            <li class="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200">
+                <div class="w-full flex items-center justify-between p-6 space-x-6">
+                    <div class="flex-1 truncate">
+                        <div class="flex items-center space-x-3">
+                            <h3 class="text-gray-900 text-sm font-medium truncate">{{ bingo_card.bingo.name }}</h3>
+                            <span class="flex-shrink-0 inline-block px-2 py-0.5 text-green-800 text-xs font-medium bg-green-100 rounded-full">{{ checkNumber != bingo_card.cells|length ? 'En cours' : 'Récemment modifié' }}</span>
+                        </div>
+                        <p class="mt-1 text-gray-500 text-sm truncate">{{ checkNumber }}/{{ bingo_card.cells|length }}</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="-mt-px flex divide-x divide-gray-200">
+                        <div class="-ml-px w-0 flex-1 flex">
+                            <a href="{{ path('app_bingo_card_showing_show_bingo_card', {'id': bingo_card.id}) }}"
+                               class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="ml-3">Continuer cette grille</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        <li class="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200">
+            <div class="w-full flex items-center justify-between p-6 space-x-6">
+                <div class="flex-1 truncate">
+                    <div class="flex items-center space-x-3">
+                        <h3 class="text-gray-900 text-sm font-medium truncate">Créer un bingo</h3>
+                        <span class="flex-shrink-0 inline-block px-2 py-0.5 text-green-800 text-xs font-medium bg-yellow-300 rounded-full">Raccourci</span>
+                    </div>
+                    <p class="mt-1 text-gray-500 text-sm truncate">Nouvelle liste de mots</p>
+                </div>
+            </div>
+            <div>
+                <div class="-mt-px flex divide-x divide-gray-200">
+                    <div class="-ml-px w-0 flex-1 flex">
+                        <a href="{{ path('app_bingo_creation_create_bingo') }}"
+                           class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span class="ml-3">Nouveau bingo</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+{% endblock body_content %}

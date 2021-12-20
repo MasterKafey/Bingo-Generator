@@ -1,0 +1,63 @@
+{% extends 'Layout/Authenticated/base.html.twig' %}
+
+{% block sub_title %}{{ bingo_card.bingo.name }}{% endblock sub_title %}
+
+{% block body_content %}
+    <h1 class="text-2xl text-center mb-10">{{ bingo_card.bingo.name }}</h1>
+    <ul role="list" class="grid grid-cols-{{ bingo_card.bingo.width}}">
+        {% for cell in bingo_card.cells %}
+        <li class="col-span-1 bg-white shadow divide-y divide-gray-200 border border-sm">
+            <button
+                    {% if cell.state == constant('App\\Entity\\BingoCardCell::CHECK_STATE') %}
+                        class="w-full p-6 space-x-6 hover:bg-green-500 bingo-cell text-center bg-green-400" data-state="check"
+                    {% else %}
+                        class="w-full p-6 space-x-6 hover:bg-gray-100 bingo-cell text-center" data-state="uncheck"
+                    {% endif %}
+                    data-cell="{{ cell.id }}">
+                <p class="text-gray-900 text-sm font-medium">{{ cell.bingoCell.content }}</p>
+            </button>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock body_content %}
+
+{% block scripts %}
+    <script>
+        let cells = document.getElementsByClassName('bingo-cell');
+        window.addEventListener('load', () => {
+            let uncheckStateClass = 'w-full p-6 space-x-6 hover:bg-gray-100 bingo-cell text-center';
+            let checkedStateClass = 'w-full p-6 space-x-6 hover:bg-green-500 bingo-cell text-center bg-green-400';
+            let checkingStateClass = 'w-full p-6 space-x-6 hover:bg-green-300 bingo-cell text-center bg-green-200';
+
+            for(let i = 0; i < cells.length; ++i) {
+                let cell = cells[i];
+                cell.onclick = (() => {
+                    let state = cell.getAttribute('data-state');
+                    if (state === 'checking') {
+
+                    } else if(state === 'uncheck') {
+                        let request = new XMLHttpRequest();
+                        cell.className = checkingStateClass;
+                        cell.setAttribute('data-state', 'checking');
+                        request.onload = () => {
+                            cell.className = checkedStateClass;
+                            cell.setAttribute('data-state', 'check');
+                        }
+                        request.open('POST', Routing.generate('app_bingo_card_cell_edition_check_bingo_card_cell', {id: cell.getAttribute('data-cell')}));
+                        request.send();
+                    } else {
+                        let request = new XMLHttpRequest();
+                        cell.className = checkingStateClass;
+                        cell.setAttribute('data-state', 'checking');
+                        request.onload = () => {
+                            cell.className = uncheckStateClass;
+                            cell.setAttribute('data-state', 'uncheck');
+                        }
+                        request.open('POST', Routing.generate('app_bingo_card_cell_edition_uncheck_bingo_card_cell', {id: cell.getAttribute('data-cell')}));
+                        request.send();
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock scripts %}

@@ -1,0 +1,65 @@
+{% extends 'Layout/Base/base.html.twig' %}
+
+{% block sub_title %}Inscription{% endblock sub_title %}
+
+{% block body %}
+        <div class="min-h-full flex">
+            <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+                <div class="mx-auto w-full max-w-sm lg:w-96">
+                    <div>
+                        <img class="h-12 w-auto rounded" src="https://static-cdn.jtvnw.net/jtv_user_pictures/8c5df566-e663-4a75-b85f-edd859d28905-profile_image-70x70.png"
+                             alt="Workflow">
+                        <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+                            S'inscrire
+                        </h2>
+                    </div>
+
+                    <div class="mt-8">
+                        <div class="mt-6">
+                            <form action="#" method="POST" class="space-y-6">
+                                {{ form_start(form) }}
+                                <div>
+                                    {{ form_label(form.username, 'Nom d\'utilisateur', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                    {{ form_errors(form.username) }}
+                                    <div class="mt-1">
+                                        {{ form_widget(form.username, {'attr': {'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                                    </div>
+                                </div>
+
+                                <div class="space-y-1">
+                                    {{ form_label(form.password.first, 'Mot de passe', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                    <div class="mt-1">
+                                        {{ form_widget(form.password.first, {'attr': {'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                                    </div>
+                                </div>
+                                <div class="space-y-1">
+                                    {{ form_label(form.password.second, 'Confirmer le mot de passe', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                    <div class="mt-1">
+                                        {{ form_widget(form.password.second, {'attr': {'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm">
+                                        <a href="{{ path('app_user_authentication_authenticate_user') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                            Déjà un compte ?
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-500 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        S'inscrire
+                                    </button>
+                                </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden lg:block relative w-0 flex-1">
+                <img class="absolute inset-0 h-full w-full object-cover"
+                     src="https://static-cdn.jtvnw.net/jtv_user_pictures/d4aeea95-c59e-41f4-b977-c69a52563284-profile_banner-480.png"
+                     alt="">
+            </div>
+        </div>
+{% endblock body %}

@@ -1,0 +1,111 @@
+{% extends 'Layout/Authenticated/base.html.twig' %}
+
+{% block sub_title %}Nouveau bingo{% endblock sub_title %}
+
+{% block body_content %}
+    {{ form_start(form, {'attr': {'class': 'space-y-8 divide-y divide-gray-200'}}) }}
+    <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+        <div>
+            <div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Création d'un nouveau bingo
+                </h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                    Un bingo correspond au modèle d'une partie. Si vous voulez plutôt commencer une partie à partir d'un
+                    bingo déjà existant, rendez-vous sur <a href="{{ path('app_bingo_listing_list_bingo') }}"
+                                                            class="text-blue-700 hover:text-blue-900 hover:underline">la
+                        page des bingos existants</a>.
+                </p>
+            </div>
+            <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                    {{ form_label(form.name, 'Nom du bingo', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'}}) }}
+                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                        <div class="max-w-lg flex rounded-md shadow-sm">
+                            {{ form_widget(form.name, {'attr': {'class': 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                        {{ form_label(form.width, 'Taille de la grille', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'}}) }}
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <div class="max-w-lg flex rounded-md shadow-sm">
+                                {{ form_widget(form.height, {'attr': {'class': 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md', 'placeholder': 'Hauteur'}, 'id': 'cells-height'}) }}
+                                {{ form_widget(form.width, {'attr': {'class': 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md', 'placeholder': 'Largeur'}, 'id': 'cells-width'}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5 text-center">
+                    {{ form_label(form.cells, 'Contenu de la grille', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'}}) }}
+                    <div class="grid grid-cols-{{ form.width.vars.value}} items-start" id="cells">
+                        {% for cell in form.cells %}
+                            {{ form_widget(cell.content, {'attr': {'class': 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300'}}) }}
+                        {% endfor %}
+                    </div>
+                    <div id="cells-prototype"
+                         data-prototype="{{ form_widget(form.cells.vars.prototype.content)|e }}"
+                         data-widget-counter="{{ form.cells|length }}"
+                    ></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pt-5">
+        <div class="flex justify-end">
+            <a href="{{ path('app_bingo_listing_list_bingo') }}"
+               class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Annuler
+            </a>
+            <button type="submit"
+                    class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Créer
+            </button>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock body_content %}
+
+{% block scripts %}
+    <script>
+        let prototype = document.getElementById('cells-prototype');
+        let height = document.getElementById('cells-height');
+        let width = document.getElementById('cells-width');
+        let cells = document.getElementById('cells');
+        window.addEventListener('load', () => {
+            height.onchange = (() => {
+                calculateGrid(height.value, width.value);
+            });
+
+            width.onchange = (() => {
+                calculateGrid(height.value, width.value);
+            });
+        });
+
+        function calculateGrid(height, width) {
+            cells.className = 'grid items-start grid-cols-' + width;
+            let prototypeValue = prototype.getAttribute('data-prototype');
+            let children = cells.children;
+            let size = children.length;
+            for (let i = size; i < width * height; ++i) {
+                let widget = document.createElement('div');
+                widget.innerHTML = prototypeValue.replace(/__name__/g, i).trim();
+                let firstChild = widget.firstChild;
+                firstChild.className = 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300';
+                cells.appendChild(firstChild);
+            }
+
+            for (let i = size - 1; i >= width * height; --i) {
+                cells.removeChild(cells.children[i]);
+            }
+        }
+    </script>
+{% endblock scripts %}

@@ -1,0 +1,42 @@
+{% block doctype %}
+    <!DOCTYPE html>
+    {% block html_html %}
+        <html class="h-full" lang="fr">
+    {% block html %}
+        {% block head_html %}
+            <head>
+                {% block head %}
+                    {% block title_html %}
+                        <title>
+                            {% block title %}
+                                {% block sub_title %}{% endblock sub_title %} | Bingo Generator
+                            {% endblock title %}
+                        </title>
+                    {% endblock title_html %}
+                    <link rel="icon" type="image/png" href="https://static-cdn.jtvnw.net/jtv_user_pictures/8c5df566-e663-4a75-b85f-edd859d28905-profile_image-70x70.png">
+                    {% block stylesheet_html %}
+                    <script src="https://cdn.tailwindcss.com"></script>
+                    {{ encore_entry_link_tags('app') }}
+                    {% endblock stylesheet_html %}
+                {% endblock head %}
+            </head>
+        {% endblock head_html %}
+        {% block body_html %}
+            <body class="h-full">
+            {% block body %}
+
+            {% endblock body %}
+            {% block scripts_html %}
+                {{ encore_entry_script_tags('app') }}
+                <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+                <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+                {% block scripts %}
+
+                {% endblock scripts %}
+            {% endblock scripts_html %}
+            </body>
+        {% endblock body_html %}
+    {% endblock html %}
+    </html>
+{% endblock html_html %}
+{% endblock doctype %}
