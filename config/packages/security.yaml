@@ -24,6 +24,7 @@ security:
                 check_path: app_user_authentication_authenticate_user
             logout:
                 path: /user/authentication/logout
+            switch_user: true
 
     access_control:
         - { path: ^/user/authentication/login, roles: PUBLIC_ACCESS }
