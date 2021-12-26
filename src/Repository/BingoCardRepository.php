@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\BingoCard;
 use App\Entity\BingoCardCell;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use function Doctrine\ORM\QueryBuilder;
 
 class BingoCardRepository extends EntityRepository
 {
@@ -18,10 +20,11 @@ class BingoCardRepository extends EntityRepository
 
         $queryBuilder
             ->where(
+                '(' .
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->gte('bingo_card.lastUpdateDateTime', ':thirty_minutes'),
                     $queryBuilder->expr()->eq('cell.state', ':uncheck_state')
-                ) . ' AND ' .
+                ) . ') AND ' .
                 $queryBuilder->expr()->eq('bingo.user', ':user')
             );
 
@@ -31,5 +34,23 @@ class BingoCardRepository extends EntityRepository
             ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findOneByUser(User $user): ?BingoCard
+    {
+        $queryBuilder = $this
+            ->createQueryBuilder('bingo_card')
+            ->innerJoin('bingo_card.bingo', 'bingo')
+        ;
+
+        $queryBuilder->where(
+            $queryBuilder->expr()->eq('bingo.user', ':user')
+        );
+
+        $queryBuilder
+            ->setParameter('user', $user)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

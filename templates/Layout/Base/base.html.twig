@@ -17,6 +17,8 @@
                     {% block stylesheet_html %}
                     <script src="https://cdn.tailwindcss.com"></script>
                     {{ encore_entry_link_tags('app') }}
+                    {% block stylesheets %}
+                    {% endblock stylesheets %}
                     {% endblock stylesheet_html %}
                 {% endblock head %}
             </head>

@@ -1,7 +1,7 @@
 {% extends 'Layout/Base/base.html.twig' %}
 
 {% block body %}
-    <div class="min-h-full">
+    <div class="min-h-full" id="full-container">
         <nav class="bg-white border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
@@ -17,6 +17,10 @@
                             {
                                 'content': 'Bingo',
                                 'route': 'app_bingo_listing_list_bingo',
+                            },
+                            {
+                                'content': 'Configuration',
+                                'route': 'app_user_edition_edit_configuration',
                             },
                             {
                                 'content': 'Déconnexion',

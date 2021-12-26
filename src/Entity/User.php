@@ -30,9 +30,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private string $salt;
 
+    #[ORM\OneToOne(targetEntity: UserConfiguration::class)]
+    private UserConfiguration $configuration;
+
     public function __construct()
     {
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $this->configuration = new UserConfiguration();
     }
 
     public function getId(): int
@@ -89,11 +93,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials()
     {
-        // No credentials in user entity
+        // No credentials in user entity, replace during password hashing
+
     }
 
     public function getUserIdentifier(): string
     {
         return $this->getUsername();
+    }
+
+    public function getConfiguration(): UserConfiguration
+    {
+        return $this->configuration;
+    }
+
+    public function setConfiguration(UserConfiguration $configuration): self
+    {
+        $this->configuration = $configuration;
+
+        return $this;
     }
 }
