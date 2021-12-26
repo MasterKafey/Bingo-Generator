@@ -13,7 +13,7 @@ class BingoCard
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: Bingo::class)]
+    #[ORM\ManyToOne(targetEntity: Bingo::class, inversedBy: 'cards')]
     private Bingo $bingo;
 
     #[ORM\OneToMany(mappedBy: 'bingoCard', targetEntity: BingoCardCell::class, cascade: ['persist', 'remove'])]

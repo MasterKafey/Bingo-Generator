@@ -22,7 +22,7 @@ class BingoCardCell
     #[ORM\ManyToOne(targetEntity: BingoCell::class)]
     private BingoCell $bingoCell;
 
-    #[ORM\ManyToOne(targetEntity: BingoCard::class)]
+    #[ORM\ManyToOne(targetEntity: BingoCard::class, inversedBy: 'cells')]
     private BingoCard $bingoCard;
 
     public function getId(): int
